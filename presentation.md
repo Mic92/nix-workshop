@@ -45,9 +45,11 @@
   - Atomic upgrades
   - Rollbacks
 
-Notes:
+Note:
   - Atomic upgrades : Install new version while keeping the old ones
   - Rollbacks: rollback to old package if the new one does not work -> Each nixos upgrades gets a grub boot entry
+
+
 
 ## How does nix work? (part 2)
 
@@ -73,13 +75,33 @@ Identical libraries are shared between packages:
 
 
 
-## Nix development shell example
+## How to setup a project with Nix
 
-See our [template](https://github.com/TUM-DSE/doctor-cluster-config/tree/master/templates)
+- In a project initialize our [template](https://github.com/TUM-DSE/doctor-cluster-config/tree/master/templates)
+
+```
+$ nix flake init  --template github:TUM-DSE/doctor-cluster-config#project-template`
+```
+
+Instead of globally installing all dependencies in they system, we have two
+files in our project repository:
+
+- **flake.nix**: describes all build tools needed to 
+- **flake.lock**: locks down the dependency versions so that we can reproduce the exact version
 
 
 
-## Pinning revision
+## How to setup a project with Nix
+
+- To load a shell:
+
+```
+$ gcc --version
+zsh: command not found: gcc
+$ nix develop
+nix-shell> gcc --version
+gcc (GCC) 10.4.0
+```
 
 
 
