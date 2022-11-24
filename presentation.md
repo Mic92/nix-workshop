@@ -4,7 +4,9 @@
 
 **Slides:** https://github.com/Mic92/nix-workshop
 
-
+Note:
+- We use Nix in the group since 2019
+- 2022: Good time for Nix workshop :)
 
 ## What are talking about today
 
@@ -34,7 +36,16 @@
 
 
 
-## How does nix work? (part 1)
+## Why not nix
+
+TODO: fixme image
+- <img class="plain" src="nix-learning-curve.png"></img>
+
+- Hopefully we can fix this in this talk :)
+
+
+
+## How does nix work? (1/2)
 
 - Each package gets its own unique installation path:
 - `/nix/store/rpdqx...-firefox-3.5.4`
@@ -51,7 +62,7 @@ Note:
 
 
 
-## How does nix work? (part 2)
+## How does nix work? (2/2)
 
 Identical libraries are shared between packages:
 
@@ -79,8 +90,8 @@ Identical libraries are shared between packages:
 
 - In a project initialize our [template](https://github.com/TUM-DSE/doctor-cluster-config/tree/master/templates)
 
-```
-$ nix flake init  --template github:TUM-DSE/doctor-cluster-config#project-template`
+```console
+$ nix flake init --template github:TUM-DSE/doctor-cluster-config#project
 ```
 
 Instead of globally installing all dependencies in they system, we have two
@@ -95,9 +106,9 @@ files in our project repository:
 
 - To load a shell:
 
-```
+```console
 $ gcc --version
-zsh: command not found: gcc
+bash: command not found: gcc
 $ nix develop
 nix-shell> gcc --version
 gcc (GCC) 10.4.0
@@ -105,27 +116,86 @@ gcc (GCC) 10.4.0
 
 
 
-## Language tutorials
+## Find packages you want
 
-- Nix is like "JSON" with functions
+- [nixpkgs package search](https://search.nixos.org/packages)
+- [nixos option search](https://search.nixos.org/options?)
+- [nix-index](https://github.com/bennofs/nix-index):
 
+```console
+$ nix-locate include/zlib.h
+zlib.dev                                         97,317 r /nix/store/smfnf8ayl3473bqlhwizl9r18rphydjp-zlib-1.2.12-dev/include/zlib.h
+...
+```
+
+
+
+## The Nix Language
+
+- Nix language is like "JSON" with functions:
+  - [Data structures](https://nix.dev/tutorials/nix-language#attribute-set): 
+    - numbers / strings / booleans / list / maps (called attrsets)
+  - Functions
+  - Variable assignments:
+ 
+ ```
+    let
+       somevar = 1;
+    in ...
+ ```
 - [Language tutorial](https://nix.dev/tutorials/nix-language)
-
-
-
-## Find packages by name and by file
-
-- nix package search
-- nixos option search
-- nix-locate
 
 
 
 ## Home-manager
 
+- [Home-manager](https://github.com/nix-community/home-manager) manages programs of your users (i.e. editor, shell commands...) and more!
+- Initialize our [home-manager template](https://github.com/TUM-DSE/doctor-cluster-config/tree/master/templates) and follow the instructions in there
+
+- You can more home-manager options here: https://mipmip.github.io/home-manager-option-search/
+
+
+
+## NixOS
+
+- NixOS uses a configuration based on the nix language called the module system:
+
+```
+{ pkgs, ... }:
+{ 
+  services.openssh.enable = true;
+  environment.systemPackages = [ pkgs.vim ];
+  # Advanced stuff
+  boot.kernelPatches = [{
+    name = "daxfs-config";
+    patch = null;
+    extraConfig = "FS_DAX y";
+  }];
+}
+```
+
 
 
 ## NixOS in our chair
 
-- show configuration repo
-- show CI
+- [The NixOS configuration of our hosts](https://github.com/TUM-DSE/doctor-cluster-config)
+- central user management (self-service)
+- easy to move services between machines
+- 17 machines in TUM on 3 architecture:
+  - x86_64-linux
+  - aarch64-linux
+  - aarch64-darwin (no nixos)
+  - riscv64-linux (cross-compiled!)
+- Each PR get automatically build in our [CI](https://buildbot.dse.in.tum.de/)
+- Machines fetch artifacts from our [binary cache](https://tum-dse.cachix.org/)
+
+
+
+## Conclusion
+
+- Nix is very powerful & flexible but has a learning curve
+- We learned:
+  - Setting up reproducible development enviroments
+  - How to find packages
+  - Manage your own user enviroment with home-manager
+  - Where to find our nixos configuration
