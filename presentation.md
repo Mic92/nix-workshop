@@ -38,10 +38,9 @@ Note:
 
 ## Why not nix
 
-TODO: fixme image
-- <img class="plain" src="nix-learning-curve.png"></img>
+<img class="plain" src="nix-learning-curve.png" height="400"></img>
 
-- Hopefully we can fix this in this talk :)
+<center>Hopefully we can fix this in this talk :)</center>
 
 
 
@@ -173,6 +172,7 @@ zlib.dev                                         97,317 r /nix/store/smfnf8ayl34
   }];
 }
 ```
+
 
 
 
