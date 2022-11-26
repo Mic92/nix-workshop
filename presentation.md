@@ -40,7 +40,7 @@ Note:
 
 <img class="plain" src="nix-learning-curve.png" height="400"></img>
 
-<center>Hopefully we can fix this in this talk :)</center>
+<center><a href="https://github.com/gytis-ivaskevicius/high-quality-nix-content">gytis-ivaskevicius/high-quality-nix-content</a></center>
 
 
 
